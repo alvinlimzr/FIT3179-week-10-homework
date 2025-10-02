@@ -1,0 +1,74 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 960,
+  "height": 520,
+  "background": "white",
+  "title": {
+    "text": "Life expectancy vs GDP per capita",
+    "anchor": "start",
+    "subtitle": "Select year with the slider; GDP is log-scaled"
+  },
+
+  "params": [
+    { "name": "Year", "value": 2020,
+      "bind": { "input": "range", "min": 1960, "max": 2024, "step": 1 } }
+  ],
+
+  "data": { "url": "data/Life_expectancy.csv", "format": {"type":"csv"} },
+
+  "transform": [
+    {
+      "lookup": "Country Code",
+      "from": {
+        "data": { "url": "data/gdp_pc_cleaned.csv", "format": {"type":"csv"} },
+        "key": "Country Code",
+        "fields": [
+          "1960","1970","1980","1990","2000","2010","2015","2018","2019","2020","2021","2022","2023","2024",
+          "Country Name"
+        ]
+      },
+      "as": [
+        "g1960","g1970","g1980","g1990","g2000","g2010","g2015","g2018","g2019","g2020","g2021","g2022","g2023","g2024",
+        "GDP Country"
+      ]
+    },
+
+    { "calculate": "toNumber(datum[toString(Year)])", "as": "life" },
+    { "calculate": "toNumber(datum['g' + toString(Year)])", "as": "gdp" },
+
+    { "filter": "isValid(datum.life) && isFinite(datum.life) && isValid(datum.gdp) && datum.gdp > 0" },
+    { "calculate": "Year", "as": "yearSel" }
+  ],
+
+  "layer": [
+    {
+      "mark": { "type": "point", "filled": true, "opacity": 0.75, "size": 58 },
+      "encoding": {
+        "x": {
+          "field": "gdp", "type": "quantitative", "title": "GDP per capita (current US$)",
+          "scale": { "type": "log", "nice": true, "clamp": true }
+        },
+        "y": { "field": "life", "type": "quantitative", "title": "Life expectancy at birth (years)" },
+        "tooltip": [
+          { "field": "Country Name", "title": "Country" },
+          { "field": "Country Code", "title": "ISO3" },
+          { "field": "yearSel", "title": "Year" },
+          { "field": "gdp", "title": "GDP per cap.", "format": ",.0f" },
+          { "field": "life", "title": "Life exp. (yrs)", "format": ".1f" }
+        ]
+      }
+    },
+
+    {
+      "transform": [
+        { "filter": "indexof(['CHN','IND','USA','SGP'], datum['Country Code']) >= 0" }
+      ],
+      "mark": { "type": "text", "fontWeight": "bold", "dx": 6, "dy": -6 },
+      "encoding": {
+        "x": { "field": "gdp", "type": "quantitative", "scale": { "type": "log" } },
+        "y": { "field": "life", "type": "quantitative" },
+        "text": { "field": "Country Code" }
+      }
+    }
+  ]
+}
