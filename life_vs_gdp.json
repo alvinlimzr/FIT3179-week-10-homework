@@ -10,16 +10,14 @@
   },
 
   "params": [
-    {
-      "name": "Year",
-      "value": 2020,
-      "bind": { "input": "range", "min": 1960, "max": 2024, "step": 1 }
-    }
+    { "name": "Year", "value": 2020, "bind": { "input": "range", "min": 1960, "max": 2024, "step": 1 } }
   ],
 
   "data": { "url": "data/Life_expectancy.csv", "format": { "type": "csv" } },
 
   "transform": [
+    { "calculate": "floor(Year/10)*10", "as": "yearSnap" },
+
     {
       "lookup": "Country Code",
       "from": {
@@ -48,30 +46,19 @@
       ]
     },
 
-    { "calculate": "toNumber(datum[toString(Year)])", "as": "life" },
-    { "calculate": "toNumber(datum['g' + toString(Year)])", "as": "gdp" },
+    { "calculate": "toNumber(datum[toString(yearSnap)])", "as": "life" },
+    { "calculate": "toNumber(datum['g' + toString(yearSnap)])", "as": "gdp" },
 
-    {
-      "filter": "isValid(datum.life) && isFinite(datum.life) && isValid(datum.gdp) && datum.gdp > 0"
-    },
-    { "calculate": "Year", "as": "yearSel" }
+    { "filter": "isValid(datum.life) && isFinite(datum.life) && isValid(datum.gdp) && datum.gdp > 0" },
+    { "calculate": "yearSnap", "as": "yearSel" }
   ],
 
   "layer": [
     {
       "mark": { "type": "point", "filled": true, "opacity": 0.75, "size": 58 },
       "encoding": {
-        "x": {
-          "field": "gdp",
-          "type": "quantitative",
-          "title": "GDP per capita (current US$)",
-          "scale": { "type": "log", "nice": true, "clamp": true }
-        },
-        "y": {
-          "field": "life",
-          "type": "quantitative",
-          "title": "Life expectancy at birth (years)"
-        },
+        "x": { "field": "gdp", "type": "quantitative", "title": "GDP per capita (current US$)", "scale": { "type": "log", "nice": true, "clamp": true } },
+        "y": { "field": "life", "type": "quantitative", "title": "Life expectancy at birth (years)" },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
           { "field": "Country Code", "title": "ISO3" },
@@ -82,9 +69,7 @@
       }
     },
     {
-      "transform": [
-        { "filter": "indexof(['CHN','IND','USA','SGP'], datum['Country Code']) >= 0" }
-      ],
+      "transform": [{ "filter": "indexof(['CHN','IND','USA','SGP'], datum['Country Code']) >= 0" }],
       "mark": { "type": "text", "fontWeight": "bold", "dx": 6, "dy": -6 },
       "encoding": {
         "x": { "field": "gdp", "type": "quantitative", "scale": { "type": "log" } },
