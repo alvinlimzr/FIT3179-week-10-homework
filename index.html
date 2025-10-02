@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FIT3179 Week 10 — Two Visualisations</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.55; margin: 0 auto; max-width: 1280px; padding: 1rem 1.25rem;
+    }
+    h1 { margin: .25rem 0 .75rem; }
+    h2 { margin: 1.75rem 0 .5rem; }
+    figure { margin: 0 0 2rem; }
+    figcaption { color: #555; font-size: .95rem; margin-top: .5rem; }
+    #vis_map, #vis_scatter { width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>FIT3179 Week 10 Homework</h1>
+  <p>
+    Two interactive visualisations created with Vega-Lite:
+    <ul>
+      <li><strong>World GDP per capita (2024)</strong> — choropleth map (Week 9, reused)</li>
+      <li><strong>Life expectancy vs GDP per capita</strong> — scatter plot with year slider & annotations (Week 10)</li>
+    </ul>
+  </p>
+
+  <!-- Week 9 Choropleth -->
+  <h2>World GDP per capita (2024)</h2>
+  <figure>
+    <div id="vis_map"></div>
+    <figcaption>Equal Earth projection; graticule every 30°. Missing data shown in grey.</figcaption>
+  </figure>
+
+  <!-- Week 10 Scatter Plot -->
+  <h2>Life expectancy vs GDP per capita</h2>
+  <figure>
+    <div id="vis_scatter"></div>
+    <figcaption>
+      Use the slider to change the year. GDP uses a log scale. Labels annotate a few countries.
+    </figcaption>
+  </figure>
+
+  <!-- Vega libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script>
+    vegaEmbed("#vis_map", "world_gdp_map.json", { actions: false }).catch(console.error);
+    vegaEmbed("#vis_scatter", "life_vs_gdp.json", { actions: false }).catch(console.error);
+  </script>
+</body>
+</html>
