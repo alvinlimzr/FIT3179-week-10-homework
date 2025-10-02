@@ -2,24 +2,24 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": "container",
   "height": 620,
-  "autosize": { "type": "fit", "contains": "padding" },
+  "autosize": {"type": "fit", "contains": "padding"},
   "background": "white",
-  "config": { "view": { "stroke": null } },
-  "projection": { "type": "equalEarth" },
-  "title": { "text": "World GDP per capita (USD), 2024", "anchor": "start" },
+  "config": {"view": {"stroke": null}},
+  "projection": {"type": "equalEarth"},
+  "title": {"text": "World GDP per capita (USD), 2024", "anchor": "start"},
 
   "layer": [
-    { "data": { "sphere": {} }, "mark": { "type": "geoshape", "fill": "#e8f4fb" } },
+    {"data": {"sphere": {}}, "mark": {"type": "geoshape", "fill": "#e8f4fb"}},
 
     {
-      "data": { "graticule": { "step": [30, 30] } },
-      "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
+      "data": {"graticule": {"step": [30, 30]}},
+      "mark": {"type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8}
     },
 
     {
       "data": {
         "url": "data/ne_countries.json",
-        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
       },
       "transform": [
         {
@@ -29,28 +29,25 @@
         {
           "lookup": "iso3",
           "from": {
-            "data": {
-              "url": "data/gdp_pc_cleaned.csv",
-              "format": { "type": "csv", "parse": { "gdp_pc_2024": "number" } }
-            },
+            "data": {"url": "data/gdp_pc_cleaned.csv", "format": {"type": "csv"}},
             "key": "Country Code",
-            "fields": ["Country Name", "gdp_pc_2024"]
+            "fields": ["Country Name", "2024"]
           }
         },
-        { "calculate": "(datum.gdp_pc_2024 && datum.gdp_pc_2024 > 0) ? datum.gdp_pc_2024 : null", "as": "gdp_pc" }
+        { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" }
       ],
-      "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.3},
       "encoding": {
         "color": {
           "field": "gdp_pc",
           "type": "quantitative",
           "title": "GDP per capita (USD, 2024)",
-          "scale": { "type": "log", "clamp": true, "scheme": "blues" }
+          "scale": {"type": "log", "clamp": true, "scheme": "blues"}
         },
         "tooltip": [
-          { "field": "Country Name", "title": "Country" },
-          { "field": "iso3", "title": "ISO3" },
-          { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
+          {"field": "Country Name", "title": "Country"},
+          {"field": "iso3", "title": "ISO3"},
+          {"field": "gdp_pc", "title": "GDP per capita", "format": ",.0f"}
         ]
       }
     },
@@ -58,7 +55,7 @@
     {
       "data": {
         "url": "data/ne_countries.json",
-        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
       },
       "transform": [
         {
@@ -68,18 +65,15 @@
         {
           "lookup": "iso3",
           "from": {
-            "data": {
-              "url": "data/gdp_pc_cleaned.csv",
-              "format": { "type": "csv", "parse": { "gdp_pc_2024": "number" } }
-            },
+            "data": {"url": "data/gdp_pc_cleaned.csv", "format": {"type": "csv"}},
             "key": "Country Code",
-            "fields": ["gdp_pc_2024"]
+            "fields": ["2024"]
           }
         },
-        { "calculate": "(datum.gdp_pc_2024 && datum.gdp_pc_2024 > 0) ? datum.gdp_pc_2024 : null", "as": "gdp_pc" },
-        { "filter": "datum.gdp_pc == null" }
+        { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" },
+        { "filter": "datum.gdp_pc == null || datum.gdp_pc <= 0" }
       ],
-      "mark": { "type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3 }
+      "mark": {"type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3}
     }
   ]
 }
