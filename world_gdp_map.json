@@ -23,8 +23,7 @@
       },
       "transform": [
         {
-          "calculate":
-            "upper(trim( (isString(datum.id) ? datum.id : '') || (datum.properties && (datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.GU_A3 || datum.properties.gu_a3)) ))",
+          "calculate": "toUpper((datum.properties && (datum.properties.ISO_A3 || datum.properties.ADM0_A3 || datum.properties.ISO_A3_EH || datum.properties.iso_a3 || datum.properties.adm0_a3 || datum.properties.iso_a3_eh)) || (isString(datum.id) ? datum.id : '') )",
           "as": "iso3"
         },
         {
@@ -60,8 +59,7 @@
       },
       "transform": [
         {
-          "calculate":
-            "upper(trim( (isString(datum.id) ? datum.id : '') || (datum.properties && (datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.GU_A3 || datum.properties.gu_a3)) ))",
+          "calculate": "toUpper((datum.properties && (datum.properties.ISO_A3 || datum.properties.ADM0_A3 || datum.properties.ISO_A3_EH || datum.properties.iso_a3 || datum.properties.adm0_a3 || datum.properties.iso_a3_eh)) || (isString(datum.id) ? datum.id : '') )",
           "as": "iso3"
         },
         {
