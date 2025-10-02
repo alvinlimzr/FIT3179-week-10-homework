@@ -23,7 +23,8 @@
       },
       "transform": [
         {
-          "calculate": "upper(trim(datum.id || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "calculate":
+            "upper(trim( (isString(datum.id) ? datum.id : '') || (datum.properties && (datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.GU_A3 || datum.properties.gu_a3)) ))",
           "as": "iso3"
         },
         {
@@ -59,7 +60,8 @@
       },
       "transform": [
         {
-          "calculate": "upper(trim(datum.id || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "calculate":
+            "upper(trim( (isString(datum.id) ? datum.id : '') || (datum.properties && (datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH || datum.properties.adm0_a3 || datum.properties.iso_a3 || datum.properties.iso_a3_eh || datum.properties.GU_A3 || datum.properties.gu_a3)) ))",
           "as": "iso3"
         },
         {
