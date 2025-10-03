@@ -6,16 +6,12 @@
   "config": { "view": { "stroke": null } },
   "projection": { "type": "equalEarth" },
   "title": { "text": "World GDP per capita (USD), 2024", "anchor": "start" },
-
   "layer": [
     { "data": { "sphere": {} }, "mark": { "type": "geoshape", "fill": "#e8f4fb" } },
-
     {
       "data": { "graticule": { "step": [30, 30] } },
       "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
     },
-
-    /* Colored countries (valid GDP only) */
     {
       "data": {
         "url": "data/ne_countries.json",
@@ -48,8 +44,6 @@
         ]
       }
     },
-
-    /* Grey overlay for missing/<=0 GDP */
     {
       "data": {
         "url": "data/ne_countries.json",
