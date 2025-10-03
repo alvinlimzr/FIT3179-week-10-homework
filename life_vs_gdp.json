@@ -6,37 +6,55 @@
   "title": {
     "text": "Life expectancy vs GDP per capita",
     "anchor": "start",
-    "subtitle": "Select year with the slider; GDP is log-scaled"
+    "subtitle": "Slider picks any year; GDP is snapped to the nearest available GDP year"
   },
 
   "params": [
-    { "name": "Year", "value": 2020,
-      "bind": { "input": "range", "min": 1960, "max": 2024, "step": 1 } }
+    {
+      "name": "Year",
+      "value": 2020,
+      "bind": { "input": "range", "min": 1960, "max": 2024, "step": 1 }
+    }
   ],
 
-  "data": { "url": "data/Life_expectancy.csv", "format": {"type":"csv"} },
+  "data": { "url": "data/Life_expectancy.csv", "format": { "type": "csv" } },
 
   "transform": [
     {
       "lookup": "Country Code",
       "from": {
-        "data": { "url": "data/gdp_pc_cleaned.csv", "format": {"type":"csv"} },
+        "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
         "key": "Country Code",
         "fields": [
-          "1960","1970","1980","1990","2000","2010","2015","2018","2019","2020","2021","2022","2023","2024",
+          "1960","1970","1980","1990","2000","2010","2015",
+          "2018","2019","2020","2021","2022","2023","2024",
           "Country Name"
         ]
       },
       "as": [
-        "g1960","g1970","g1980","g1990","g2000","g2010","g2015","g2018","g2019","g2020","g2021","g2022","g2023","g2024",
+        "g1960","g1970","g1980","g1990","g2000","g2010","g2015",
+        "g2018","g2019","g2020","g2021","g2022","g2023","g2024",
         "GDP Country"
       ]
     },
 
+    /* Life expectancy uses the exact selected year (it exists for every year). */
     { "calculate": "toNumber(datum[toString(Year)])", "as": "life" },
-    { "calculate": "toNumber(datum['g' + toString(Year)])", "as": "gdp" },
 
-    { "filter": "isValid(datum.life) && isFinite(datum.life) && isValid(datum.gdp) && datum.gdp > 0" },
+    /* Snap the slider year to the nearest GDP year available in your CSV. */
+    {
+      "calculate": "var y = Year; y <= 1965 ? 1960 : y <= 1975 ? 1970 : y <= 1985 ? 1980 : y <= 1995 ? 1990 : y <= 2005 ? 2000 : y <= 2012 ? 2010 : y <= 2017 ? 2015 : y",
+      "as": "gYear"
+    },
+
+    /* Pull GDP from the snapped year column. */
+    { "calculate": "toNumber(datum['g' + toString(datum.gYear)])", "as": "gdp" },
+
+    /* Keep only valid numbers and positive GDP (for the log scale). */
+    {
+      "filter": "isValid(datum.life) && isFinite(datum.life) && isValid(datum.gdp) && isFinite(datum.gdp) && datum.gdp > 0"
+    },
+
     { "calculate": "Year", "as": "yearSel" }
   ],
 
@@ -52,7 +70,8 @@
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
           { "field": "Country Code", "title": "ISO3" },
-          { "field": "yearSel", "title": "Year" },
+          { "field": "yearSel", "title": "Selected year" },
+          { "field": "gYear", "title": "GDP year used" },
           { "field": "gdp", "title": "GDP per cap.", "format": ",.0f" },
           { "field": "life", "title": "Life exp. (yrs)", "format": ".1f" }
         ]
