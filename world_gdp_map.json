@@ -19,7 +19,7 @@
       },
       "transform": [
         {
-          "lookup": "ADM0_A3",
+          "lookup": "properties.ADM0_A3",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
@@ -39,7 +39,7 @@
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
-          { "field": "ADM0_A3", "title": "ISO3" },
+          { "field": "properties.ADM0_A3", "title": "ISO3" },
           { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
         ]
       }
@@ -51,7 +51,7 @@
       },
       "transform": [
         {
-          "lookup": "ADM0_A3",
+          "lookup": "properties.ADM0_A3",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
