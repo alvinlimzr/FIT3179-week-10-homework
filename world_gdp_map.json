@@ -9,24 +9,36 @@
 
   "layer": [
     { "data": { "sphere": {} }, "mark": { "type": "geoshape", "fill": "#e8f4fb" } },
-    { "data": { "graticule": { "step": [30, 30] } },
-      "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 } },
 
     {
-      "data": { "url": "data/ne_countries.json",
-                "format": { "type": "topojson", "feature": "ne_countries" } },
+      "data": { "graticule": { "step": [30, 30] } },
+      "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
+    },
+
+    {
+      "data": {
+        "url": "data/ne_countries.json",
+        "format": { "type": "topojson", "feature": "ne_countries" }
+      },
       "transform": [
-        { "lookup": "properties.ISO_A3_EH",
-          "from": { "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
-                    "key": "Country Code",
-                    "fields": ["Country Name", "2024"] } },
+        {
+          "lookup": "properties.ISO_A3_EH",
+          "from": {
+            "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
+            "key": "Country Code",
+            "fields": ["Country Name", "2024"]
+          }
+        },
         { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" }
       ],
       "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
       "encoding": {
-        "color": { "field": "gdp_pc", "type": "quantitative",
-                   "title": "GDP per capita (USD, 2024)",
-                   "scale": { "type": "log", "clamp": true, "scheme": "blues" } },
+        "color": {
+          "field": "gdp_pc",
+          "type": "quantitative",
+          "title": "GDP per capita (USD, 2024)",
+          "scale": { "type": "log", "clamp": true, "scheme": "blues" }
+        },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
           { "field": "properties.ISO_A3_EH", "title": "ISO3" },
@@ -36,13 +48,19 @@
     },
 
     {
-      "data": { "url": "data/ne_countries.json",
-                "format": { "type": "topojson", "feature": "ne_countries" } },
+      "data": {
+        "url": "data/ne_countries.json",
+        "format": { "type": "topojson", "feature": "ne_countries" }
+      },
       "transform": [
-        { "lookup": "properties.ISO_A3_EH",
-          "from": { "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
-                    "key": "Country Code",
-                    "fields": ["2024"] } },
+        {
+          "lookup": "properties.ISO_A3_EH",
+          "from": {
+            "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
+            "key": "Country Code",
+            "fields": ["2024"]
+          }
+        },
         { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" },
         { "filter": "datum.gdp_pc == null || datum.gdp_pc <= 0" }
       ],
