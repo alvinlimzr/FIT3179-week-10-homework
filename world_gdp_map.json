@@ -12,6 +12,7 @@
       "data": { "graticule": { "step": [30, 30] } },
       "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
     },
+
     {
       "data": {
         "url": "data/ne_countries.json",
@@ -19,7 +20,11 @@
       },
       "transform": [
         {
-          "lookup": "ISO_A3_EH",
+          "calculate": "(datum.properties && (datum.properties.ISO_A3_EH || datum.properties.ADM0_A3 || datum.properties.ISO_A3)) || datum.id",
+          "as": "iso3"
+        },
+        {
+          "lookup": "iso3",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
@@ -39,11 +44,12 @@
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
-          { "field": "ISO_A3_EH", "title": "ISO3" },
+          { "field": "iso3", "title": "ISO3" },
           { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
         ]
       }
     },
+
     {
       "data": {
         "url": "data/ne_countries.json",
@@ -51,7 +57,11 @@
       },
       "transform": [
         {
-          "lookup": "ISO_A3_EH",
+          "calculate": "(datum.properties && (datum.properties.ISO_A3_EH || datum.properties.ADM0_A3 || datum.properties.ISO_A3)) || datum.id",
+          "as": "iso3"
+        },
+        {
+          "lookup": "iso3",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
