@@ -6,9 +6,8 @@
   "title": {
     "text": "Life expectancy vs GDP per capita",
     "anchor": "start",
-    "subtitle": "Slider year → life expectancy that year; GDP snapped to nearest available year"
+    "subtitle": "Slider picks any year; GDP snaps to nearest available GDP year"
   },
-
   "params": [
     {
       "name": "Year",
@@ -16,10 +15,23 @@
       "bind": { "input": "range", "min": 1960, "max": 2024, "step": 1 }
     }
   ],
-
   "data": { "url": "data/Life_expectancy.csv", "format": { "type": "csv" } },
-
   "transform": [
+    {
+      "fold": [
+        "1960","1961","1962","1963","1964","1965","1966","1967","1968","1969",
+        "1970","1971","1972","1973","1974","1975","1976","1977","1978","1979",
+        "1980","1981","1982","1983","1984","1985","1986","1987","1988","1989",
+        "1990","1991","1992","1993","1994","1995","1996","1997","1998","1999",
+        "2000","2001","2002","2003","2004","2005","2006","2007","2008","2009",
+        "2010","2011","2012","2013","2014","2015","2016","2017","2018","2019",
+        "2020","2021","2022","2023","2024"
+      ],
+      "as": ["year", "lifeRaw"]
+    },
+    { "calculate": "toNumber(datum.lifeRaw)", "as": "life" },
+    { "calculate": "toNumber(datum.year)", "as": "yearNum" },
+    { "filter": "datum.yearNum == Year" },
     {
       "lookup": "Country Code",
       "from": {
@@ -37,21 +49,15 @@
         "GDP Country"
       ]
     },
-
-    { "calculate": "toNumber(datum[Year])", "as": "life" },
-
     {
       "calculate": "Year <= 1965 ? 1960 : Year <= 1975 ? 1970 : Year <= 1985 ? 1980 : Year <= 1995 ? 1990 : Year <= 2005 ? 2000 : Year <= 2012 ? 2010 : Year <= 2017 ? 2015 : Year <= 2018 ? 2018 : Year <= 2019 ? 2019 : Year <= 2020 ? 2020 : Year <= 2021 ? 2021 : Year <= 2022 ? 2022 : Year <= 2023 ? 2023 : 2024",
       "as": "gYear"
     },
-
     { "calculate": "toNumber(datum['g' + datum.gYear])", "as": "gdp" },
-
     {
       "filter": "isValid(datum.life) && isFinite(datum.life) && isValid(datum.gdp) && isFinite(datum.gdp) && datum.gdp > 0"
     }
   ],
-
   "layer": [
     {
       "mark": { "type": "point", "filled": true, "opacity": 0.75, "size": 58 },
@@ -60,7 +66,7 @@
           "field": "gdp",
           "type": "quantitative",
           "title": "GDP per capita (current US$)",
-          "scale": { "type": "log" }
+          "scale": { "type": "log", "nice": true, "clamp": true }
         },
         "y": {
           "field": "life",
@@ -73,7 +79,7 @@
           { "field": "Year", "title": "Life exp. year" },
           { "field": "gYear", "title": "GDP year used" },
           { "field": "gdp", "title": "GDP per cap.", "format": ",.0f" },
-          { "field": "life", "title": "Life exp.", "format": ".1f" }
+          { "field": "life", "title": "Life exp. (yrs)", "format": ".1f" }
         ]
       }
     },
