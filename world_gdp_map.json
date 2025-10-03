@@ -29,7 +29,8 @@
             "fields": ["Country Name", "2024"]
           }
         },
-        { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" }
+        { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" },
+        { "filter": "isValid(datum.gdp_pc) && isFinite(datum.gdp_pc) && datum.gdp_pc > 0" }
       ],
       "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.3 },
       "encoding": {
@@ -62,7 +63,7 @@
           }
         },
         { "calculate": "toNumber(datum['2024'])", "as": "gdp_pc" },
-        { "filter": "datum.gdp_pc == null || datum.gdp_pc <= 0" }
+        { "filter": "datum.gdp_pc == null || !isFinite(datum.gdp_pc) || datum.gdp_pc <= 0" }
       ],
       "mark": { "type": "geoshape", "fill": "#efefef", "stroke": "white", "strokeWidth": 0.3 }
     }
