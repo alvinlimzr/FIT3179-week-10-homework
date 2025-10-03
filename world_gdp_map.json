@@ -6,23 +6,20 @@
   "config": { "view": { "stroke": null } },
   "projection": { "type": "equalEarth" },
   "title": { "text": "World GDP per capita (USD), 2024", "anchor": "start" },
-
   "layer": [
     { "data": { "sphere": {} }, "mark": { "type": "geoshape", "fill": "#e8f4fb" } },
-
     {
       "data": { "graticule": { "step": [30, 30] } },
       "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
     },
-
     {
       "data": {
         "url": "data/ne_countries.json",
-        "format": { "type": "topojson", "feature": "ne_countries" }
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
       },
       "transform": [
         {
-          "lookup": "properties.ADM0_A3",
+          "lookup": "ADM0_A3",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
@@ -42,20 +39,19 @@
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
-          { "field": "properties.ADM0_A3", "title": "ISO3" },
+          { "field": "ADM0_A3", "title": "ISO3" },
           { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
         ]
       }
     },
-
     {
       "data": {
         "url": "data/ne_countries.json",
-        "format": { "type": "topojson", "feature": "ne_countries" }
+        "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
       },
       "transform": [
         {
-          "lookup": "properties.ADM0_A3",
+          "lookup": "ADM0_A3",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
