@@ -23,7 +23,8 @@
       },
       "transform": [
         {
-          "calculate": "upper(trim(datum.id || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+          "calculate": "toUpper(trim(datum.id || datum.properties.ADM0_A3 || datum.properties.ISO_A3 || datum.properties.ISO_A3_EH))",
+
           "as": "iso3"
         },
         {
