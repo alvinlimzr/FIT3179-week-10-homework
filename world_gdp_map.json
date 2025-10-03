@@ -15,6 +15,7 @@
       "mark": { "type": "geoshape", "stroke": "#c8d3df", "strokeWidth": 0.6, "opacity": 0.8 }
     },
 
+    /* Colored countries (valid GDP only) */
     {
       "data": {
         "url": "data/ne_countries.json",
@@ -22,7 +23,7 @@
       },
       "transform": [
         {
-          "lookup": "properties.ISO_A3_EH",
+          "lookup": "ISO_A3_EH",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
@@ -42,12 +43,13 @@
         },
         "tooltip": [
           { "field": "Country Name", "title": "Country" },
-          { "field": "properties.ISO_A3_EH", "title": "ISO3" },
+          { "field": "ISO_A3_EH", "title": "ISO3" },
           { "field": "gdp_pc", "title": "GDP per capita", "format": ",.0f" }
         ]
       }
     },
 
+    /* Grey overlay for missing/<=0 GDP */
     {
       "data": {
         "url": "data/ne_countries.json",
@@ -55,7 +57,7 @@
       },
       "transform": [
         {
-          "lookup": "properties.ISO_A3_EH",
+          "lookup": "ISO_A3_EH",
           "from": {
             "data": { "url": "data/gdp_pc_cleaned.csv", "format": { "type": "csv" } },
             "key": "Country Code",
